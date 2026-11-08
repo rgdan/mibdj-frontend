@@ -1,27 +1,31 @@
-# MiBDJ
+# Acceso de MiBDJ
 
-## Dirección elegida
+La pantalla contiene únicamente el nombre MiBDJ y el formulario de username. Sin navegación, presentación del producto, secciones informativas ni pie de página.
 
-Landing en español, colorida y lúdica. La presentación y la vista previa de acceso comparten una mesa de juego. Dados, cartas y fichas son ilustraciones CSS/SVG, no una captura simulada de la aplicación.
+## Dirección visual
 
-Se consideraron una estantería personal (colección), una hoja de resultados (historial) y una mesa preparada para jugar. La mesa conecta mejor colección, partidas y participantes y permite poner el acceso en el centro de esa composición.
+Colorida y lúdica: el formulario es una carta sobre una mesa de juego, rodeado de dados y fichas dibujados en CSS/SVG. Son ilustraciones decorativas ocultas para lectores de pantalla, no capturas ficticias de la aplicación.
 
-## Sistema
-
-- Fondo papel `#FFF8E7`, tinta `#18243A`, acción roja `#E64B36`, fichas amarillas `#F6C84F` y tapete verde `#25866F`. Rojo oscuro `#CF3926` para texto grande con contraste sobre papel y tinta más oscura `#0A1424` sobre el botón rojo para cumplir contraste AA.
-- Bricolage Grotesque local: peso 700 en titulares, 400 en texto y 600 en controles. Su dibujo irregular aporta el carácter de una caja de juego sin perder legibilidad.
-- El hero usa dos columnas, el bloque de colección una superficie amarilla y los otros contenidos filas abiertas. Las composiciones varían para evitar una grilla de tarjetas repetidas.
-- Bordes de tinta y sombras cortas representan piezas apoyadas sobre la mesa; los controles usan radios menores que las cartas.
-- Diales: energía 3, ritmo 2, movimiento 1.
-
-## Movimiento
-
-Las piezas se acomodan una sola vez con transform durante 650 ms y una curva `cubic-bezier(.22, 1, .36, 1)`. Los botones se levantan al apuntarlos y se apoyan al pulsar. La página queda quieta en reposo para no competir con el formulario. Movimiento reducido elimina las animaciones y el scroll suave.
+- Papel `#FFF8E7`, tinta `#18243A`, rojo `#E64B36`, amarillo `#F6C84F` y verde `#25866F`, derivados de piezas físicas.
+- Bricolage Grotesque local: 700 para el título, 400 para texto y 600 para controles. Su dibujo da carácter sin agregar otra familia tipográfica.
+- Bordes definidos y sombras cortas representan cartas y fichas apoyadas sobre la mesa. El espacio y los controles se ajustan en teléfono para mantener el acceso visible.
+- Energía 3, ritmo 1 y movimiento 1. Las piezas se acomodan una vez durante 650 ms y quedan quietas. Movimiento reducido elimina esa entrada.
 
 ## Comportamiento
 
-La navegación lleva a secciones reales. Entrar enfoca el username. El formulario es una vista previa visible: no envía peticiones, no guarda datos ni simula una sesión. El botón de envío permanece deshabilitado y su explicación es visible.
+El primer Tab enfoca el username, con un contorno visible. El acceso sigue siendo una vista previa señalada: botón deshabilitado, explicación visible y formulario sin peticiones ni almacenamiento. Enter no crea sesiones ni cambia la URL. No hay selector de usuarios ni contraseña.
 
 ## Comprobación
 
-Revisar build de producción, teclado, foco, contraste, ancho de 360 px, escritorio y movimiento reducido. Comprobar que Enter no envíe el formulario ni cambie la URL. No hay métricas, testimonios, usuarios o partidas inventados. Esta entrega es local, sin backend, publicación ni cambios a README.
+`npm test` construye producción y comprueba 360, 390 y 1440 px, teclado, ausencia de navegación y pie, formulario sin envío, almacenamiento vacío y movimiento reducido. Playwright requiere `npx playwright install chromium --only-shell` en un entorno nuevo.
+
+El desarrollo local se inicia con `npm run dev`. Esta versión no conecta el backend, no se publica y no modifica README.
+
+## Resultado de revisión
+
+- Hard Gate PASS: build y cuatro pruebas de navegador correctos; Axe no detectó infracciones A/AA a 360, 390 y 1440 px. El formulario no envía peticiones ni guarda datos.
+- Purpose Gate PASS: la paleta, las piezas y sus sombras tienen su razón en la composición de mesa; solo queda el contenido del acceso.
+- Liveliness PASS: energía 3 y movimiento 1 mediante una entrada breve de piezas, sin animación continua ni movimiento cuando se pide reducirlo.
+- Craft PASS: el primer Tab enfoca el único campo, no hay desbordamiento horizontal, navegación ni pie. El estado de vista previa permanece visible.
+
+Capturas verificadas con Chromium de escritorio y tamaños de teléfono simulados; sin prueba en un teléfono físico.
