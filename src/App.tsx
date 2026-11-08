@@ -16,14 +16,12 @@ function App() {
         </div>
 
         <section className="access-card" aria-labelledby="access-title">
-          <p className="access-label"><span aria-hidden="true" /> Vista previa del acceso</p>
           <h1 id="access-title">Primero,<br />tu nombre.</h1>
           <p className="access-description">Tu lugar en la mesa empieza acá.</p>
-          <form onSubmit={(event) => event.preventDefault()} aria-describedby="access-notice">
+          <form onSubmit={(event) => event.preventDefault()}>
             <label htmlFor="username">Nombre de usuario</label>
             <input id="username" name="username" type="text" autoComplete="username" placeholder="Tu usuario" spellCheck={false} />
             <button type="submit" disabled>Entrar</button>
-            <p className="access-notice" id="access-notice">El acceso aún no está habilitado.</p>
           </form>
         </section>
       </div>
