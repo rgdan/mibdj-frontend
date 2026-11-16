@@ -14,6 +14,9 @@ export async function login(email: string, signal: AbortSignal): Promise<User> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: email.trim() }),
     signal,
+  }).catch(error => {
+    if (signal.aborted) throw error
+    throw new Error('No pudimos conectar con el servidor. Intentá de nuevo.')
   })
 
   if (response.status === 400) {
