@@ -1,0 +1,69 @@
+import { useEffect, useRef, useState } from 'react'
+import type { FormEvent } from 'react'
+import { login } from './session'
+import type { User } from './session'
+
+function Login({ onLogin }: { onLogin: (user: User) => void }) {
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState('')
+  const request = useRef<AbortController | null>(null)
+
+  useEffect(() => () => request.current?.abort(), [])
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (request.current) return
+
+    const email = String(new FormData(event.currentTarget).get('email') ?? '')
+    const controller = new AbortController()
+    request.current = controller
+    setPending(true)
+    setError('')
+
+    try {
+      const user = await login(email, controller.signal)
+      if (!controller.signal.aborted) onLogin(user)
+    } catch (error) {
+      if (!controller.signal.aborted) {
+        setError(error instanceof Error && !(error instanceof TypeError)
+          ? error.message
+          : 'No pudimos conectar con el servidor. Intentá de nuevo.')
+      }
+    } finally {
+      if (request.current === controller) {
+        request.current = null
+        if (!controller.signal.aborted) setPending(false)
+      }
+    }
+  }
+
+  return <main className="login-page">
+    <div className="login-shell">
+      <p className="wordmark" aria-label="MiBDJ">Mi<span>BDJ</span><b>.</b></p>
+      <div className="play-table">
+        <div className="table-art" aria-hidden="true">
+          <svg className="board-route" viewBox="0 0 540 570" fill="none"><path d="M-20 108H165C242 108 240 35 320 35H545M5 380H98C160 380 145 503 223 503H432C497 503 460 410 555 410" /></svg>
+          <div className="playing-card card-back"><span className="card-flower">✳</span></div>
+          <div className="playing-card card-front"><div className="card-orbit"><span /><span /><span /></div></div>
+          <div className="token token-yellow token-top" />
+          <div className="token token-red token-bottom" />
+          <div className="small-token" />
+          <div className="dice"><i /><i /><i /><i /><i /></div>
+        </div>
+
+        <section className="access-card" aria-labelledby="access-title">
+          <h1 id="access-title">Primero,<br />tu email.</h1>
+          <p className="access-description">Tu lugar en la mesa empieza acá.</p>
+          <form onSubmit={submit} aria-busy={pending}>
+            <label htmlFor="email">Email</label>
+            <input id="email" name="email" type="email" autoComplete="email" placeholder="Tu email" spellCheck={false} required disabled={pending} aria-describedby={error ? 'access-error' : undefined} />
+            {error && <p id="access-error" className="access-error" role="alert">{error}</p>}
+            <button type="submit" disabled={pending}>{pending ? 'Entrando…' : 'Entrar'}</button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+}
+
+export default Login

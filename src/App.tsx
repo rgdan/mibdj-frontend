@@ -1,30 +1,62 @@
+import { useEffect, useRef, useState } from 'react'
+import Login from './Login'
+import type { User } from './session'
 import './styles.css'
 
+const pages = [
+  { path: '/catalogo', title: 'Catálogo' },
+  { path: '/coleccion', title: 'Colección' },
+  { path: '/deseos', title: 'Deseos' },
+  { path: '/partidas', title: 'Partidas' },
+  { path: '/estadisticas', title: 'Estadísticas' },
+]
+
 function App() {
-  return <main className="login-page">
+  const [user, setUser] = useState<User | null>(null)
+  const [path, setPath] = useState(() => window.location.hash.slice(1) || '/catalogo')
+  const heading = useRef<HTMLHeadingElement>(null)
+  const page = pages.find((page) => page.path === path)
+
+  useEffect(() => {
+    const onHashChange = () => setPath(window.location.hash.slice(1) || '/catalogo')
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  useEffect(() => {
+    document.title = `${user ? page?.title ?? 'Página no encontrada' : 'Acceso'} · MiBDJ`
+    if (user) heading.current?.focus()
+  }, [user, path, page])
+
+  function enter(user: User) {
+    setUser(user)
+    setPath('/catalogo')
+    window.location.hash = '/catalogo'
+  }
+
+  function logout() {
+    setUser(null)
+    setPath('/catalogo')
+    window.location.hash = '/'
+  }
+
+  if (!user) return <Login onLogin={enter} />
+
+  return <main className="login-page" key={user.id}>
     <div className="login-shell">
       <p className="wordmark" aria-label="MiBDJ">Mi<span>BDJ</span><b>.</b></p>
-      <div className="play-table">
-        <div className="table-art" aria-hidden="true">
-          <svg className="board-route" viewBox="0 0 540 570" fill="none"><path d="M-20 108H165C242 108 240 35 320 35H545M5 380H98C160 380 145 503 223 503H432C497 503 460 410 555 410" /></svg>
-          <div className="playing-card card-back"><span className="card-flower">✳</span></div>
-          <div className="playing-card card-front"><div className="card-orbit"><span /><span /><span /></div></div>
-          <div className="token token-yellow token-top" />
-          <div className="token token-red token-bottom" />
-          <div className="small-token" />
-          <div className="dice"><i /><i /><i /><i /><i /></div>
-        </div>
-
-        <section className="access-card" aria-labelledby="access-title">
-          <h1 id="access-title">Primero,<br />tu nombre.</h1>
-          <p className="access-description">Tu lugar en la mesa empieza acá.</p>
-          <form onSubmit={(event) => event.preventDefault()}>
-            <label htmlFor="username">Nombre de usuario</label>
-            <input id="username" name="username" type="text" autoComplete="username" placeholder="Tu usuario" spellCheck={false} />
-            <button type="submit" disabled>Entrar</button>
-          </form>
-        </section>
+      <div className="session-bar">
+        <p className="active-user">{user.name}</p>
+        <button className="logout-button" type="button" onClick={logout}>Salir</button>
       </div>
+      <nav className="app-nav" aria-label="Secciones">
+        {pages.map((page) => <a key={page.path} href={`#${page.path}`} aria-current={path === page.path ? 'page' : undefined}>{page.title}</a>)}
+      </nav>
+      <section className="section-page" aria-labelledby="section-title">
+        <h1 id="section-title" ref={heading} tabIndex={-1}>{page?.title ?? 'Página no encontrada'}</h1>
+        <p>{page ? 'Todavía no disponible.' : 'Esta dirección no corresponde a ninguna sección.'}</p>
+        {!page && <a href="#/catalogo">Volver al catálogo</a>}
+      </section>
     </div>
   </main>
 }
