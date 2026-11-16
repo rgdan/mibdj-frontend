@@ -33,8 +33,9 @@ por ejemplo `ana.mora@gmail.com`. No se pide contraseña.
 
 Las secciones aparecen después de entrar. `Salir` limpia el usuario activo.
 El acceso se mantiene en memoria; al recargar la página hay que volver a entrar.
-Catálogo, colección, deseos, partidas y estadísticas todavía muestran pantallas
-provisionales.
+El catálogo permite buscar por título, filtrar por categoría y abrir el detalle
+de un juego. Los filtros se conservan al volver del detalle. Colección, deseos,
+partidas y estadísticas todavía muestran pantallas provisionales.
 
 ## Backend
 

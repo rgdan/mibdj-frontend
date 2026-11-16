@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Login from './Login'
+import Catalog from './Catalog'
+import GameDetail from './GameDetail'
 import type { User } from './session'
 import './styles.css'
 
@@ -15,7 +17,10 @@ function App() {
   const [user, setUser] = useState<User | null>(null)
   const [path, setPath] = useState(() => window.location.hash.slice(1) || '/catalogo')
   const heading = useRef<HTMLHeadingElement>(null)
-  const page = pages.find((page) => page.path === path)
+  const [route, query = ''] = path.split('?')
+  const gameId = route.match(/^\/catalogo\/([1-9]\d*)$/)?.[1]
+  const page = pages.find((page) => page.path === (gameId ? '/catalogo' : route))
+  const title = gameId ? 'Detalle del juego' : page?.title ?? 'Página no encontrada'
 
   useEffect(() => {
     const onHashChange = () => setPath(window.location.hash.slice(1) || '/catalogo')
@@ -24,9 +29,9 @@ function App() {
   }, [])
 
   useEffect(() => {
-    document.title = `${user ? page?.title ?? 'Página no encontrada' : 'Acceso'} · MiBDJ`
+    document.title = `${user ? title : 'Acceso'} · MiBDJ`
     if (user) heading.current?.focus()
-  }, [user, path, page])
+  }, [user, path, title])
 
   function enter(user: User) {
     setUser(user)
@@ -42,19 +47,21 @@ function App() {
 
   if (!user) return <Login onLogin={enter} />
 
-  return <main className="login-page" key={user.id}>
-    <div className="login-shell">
+  return <main className="app-page" key={user.id}>
+    <div className="app-shell">
       <p className="wordmark" aria-label="MiBDJ">Mi<span>BDJ</span><b>.</b></p>
       <div className="session-bar">
         <p className="active-user">{user.name}</p>
         <button className="logout-button" type="button" onClick={logout}>Salir</button>
       </div>
       <nav className="app-nav" aria-label="Secciones">
-        {pages.map((page) => <a key={page.path} href={`#${page.path}`} aria-current={path === page.path ? 'page' : undefined}>{page.title}</a>)}
+        {pages.map(link => <a key={link.path} href={`#${link.path}`} aria-current={page?.path === link.path ? 'page' : undefined}>{link.title}</a>)}
       </nav>
       <section className="section-page" aria-labelledby="section-title">
-        <h1 id="section-title" ref={heading} tabIndex={-1}>{page?.title ?? 'Página no encontrada'}</h1>
-        <p>{page ? 'Todavía no disponible.' : 'Esta dirección no corresponde a ninguna sección.'}</p>
+        <h1 id="section-title" ref={heading} tabIndex={-1}>{title}</h1>
+        {gameId ? <GameDetail key={gameId} id={gameId} query={query} />
+          : route === '/catalogo' ? <Catalog query={query} />
+          : <p>{page ? 'Todavía no disponible.' : 'Esta dirección no corresponde a ninguna sección.'}</p>}
         {!page && <a href="#/catalogo">Volver al catálogo</a>}
       </section>
     </div>

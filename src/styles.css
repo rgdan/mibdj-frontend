@@ -20,11 +20,13 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; }
-button, input { font: inherit; }
+button, input, select { font: inherit; }
 ::selection { background: var(--yellow); color: var(--ink); }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
 .login-page { min-height: 100svh; display: grid; place-items: center; padding: 36px 20px; }
 .login-shell { width: min(100%, 720px); }
+.app-page { min-height: 100svh; padding: 36px 20px; }
+.app-shell { width: min(100%, 1120px); margin: 0 auto; }
 .wordmark { margin: 0 0 26px; text-align: center; font-size: 40px; font-weight: 800; letter-spacing: -1.8px; line-height: 1; }
 .wordmark span { font-weight: 600; }
 .wordmark b { color: var(--red); }
@@ -38,6 +40,28 @@ button, input { font: inherit; }
 .section-page h1 { font-size: clamp(32px, 7vw, 56px); overflow-wrap: anywhere; }
 .section-page p { line-height: 1.5; margin: 0 0 24px; }
 .section-page a { display: inline-block; padding: 12px 0; color: var(--ink); text-underline-offset: 4px; }
+.catalog-filters { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; gap: 16px; margin: 28px 0 32px; }
+.catalog-filters > div { min-width: 0; }
+.catalog-filters input, .catalog-filters select { width: 100%; min-width: 0; min-height: 54px; padding: 12px; border: 1.5px solid var(--ink); border-radius: 6px; color: var(--ink); background: #fffcf4; font-size: 16px; }
+.catalog-filters button { width: auto; margin: 0; min-height: 54px; padding: 12px 24px; }
+.catalog-filters > a { grid-column: 1 / -1; justify-self: start; }
+.catalog-count { font-weight: 600; }
+.game-list { list-style: none; margin: 0; padding: 0; }
+.game-list > li { border-top: 1px solid var(--ink); padding: 24px 0; }
+.game-list > li:last-child { padding-bottom: 0; }
+.game-list h2, .game-detail h2 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 36px); line-height: 1.15; overflow-wrap: anywhere; }
+.game-list h2 a { padding: 0; }
+.game-list .game-publisher, .game-detail .game-publisher { margin-bottom: 12px; }
+.game-list article > p { margin-bottom: 12px; }
+.game-categories { display: flex; flex-wrap: wrap; gap: 8px 20px; list-style: none; padding: 0; margin: 0; font-weight: 600; }
+.game-categories li { border-bottom: 3px solid var(--green); padding: 3px 0; overflow-wrap: anywhere; }
+.game-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 28px 0; }
+.game-facts dt { font-size: 14px; margin-bottom: 8px; }
+.game-facts dd { margin: 0; font-size: 24px; font-weight: 600; }
+.game-detail h3 { margin: 28px 0 12px; }
+.game-actions { border-top: 1px solid var(--ink); margin-top: 32px; }
+.game-actions p { max-width: 55ch; }
+.catalog-message button { width: auto; min-height: 44px; margin: 0; padding: 10px 20px; }
 .play-table { position: relative; min-height: 640px; border: 2px solid var(--ink); border-radius: 24px; background: var(--green); isolation: isolate; }
 .table-art { position: absolute; inset: 0; overflow: hidden; border-radius: 22px; pointer-events: none; }
 .board-route { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -82,6 +106,10 @@ button:not(:disabled):hover { box-shadow: 2px 3px 0 var(--ink); }
 @keyframes piece-settle { from { transform: translateY(-14px) rotate(-6deg); } to { transform: translateY(0) rotate(0); } }
 
 @media (max-width: 600px) {
+  .app-page { padding: 28px 20px; }
+  .catalog-filters { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .catalog-filters label { font-size: 16px; }
+  .game-facts { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .login-page { padding: 28px 20px; }
   .login-shell { width: min(100%, 540px); }
   .wordmark { font-size: 29px; margin-bottom: 22px; }
