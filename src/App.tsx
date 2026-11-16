@@ -34,12 +34,21 @@ function App() {
     window.location.hash = '/catalogo'
   }
 
+  function logout() {
+    setUser(null)
+    setPath('/catalogo')
+    window.location.hash = '/'
+  }
+
   if (!user) return <Login onLogin={enter} />
 
   return <main className="login-page" key={user.id}>
     <div className="login-shell">
       <p className="wordmark" aria-label="MiBDJ">Mi<span>BDJ</span><b>.</b></p>
-      <p className="active-user">{user.name}</p>
+      <div className="session-bar">
+        <p className="active-user">{user.name}</p>
+        <button className="logout-button" type="button" onClick={logout}>Salir</button>
+      </div>
       <nav className="app-nav" aria-label="Secciones">
         {pages.map((page) => <a key={page.path} href={`#${page.path}`} aria-current={path === page.path ? 'page' : undefined}>{page.title}</a>)}
       </nav>
