@@ -16,11 +16,11 @@ function App() {
         </div>
 
         <section className="access-card" aria-labelledby="access-title">
-          <h1 id="access-title">Primero,<br />tu nombre.</h1>
+          <h1 id="access-title">Primero,<br />tu email.</h1>
           <p className="access-description">Tu lugar en la mesa empieza acá.</p>
           <form onSubmit={(event) => event.preventDefault()}>
-            <label htmlFor="username">Nombre de usuario</label>
-            <input id="username" name="username" type="text" autoComplete="username" placeholder="Tu usuario" spellCheck={false} />
+            <label htmlFor="email">Email</label>
+            <input id="email" name="email" type="email" autoComplete="email" placeholder="Tu email" spellCheck={false} required />
             <button type="submit" disabled>Entrar</button>
           </form>
         </section>
