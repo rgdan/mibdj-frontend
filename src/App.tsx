@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import Login from './Login'
 import Catalog from './Catalog'
 import GameDetail from './GameDetail'
+import Matches from './Matches'
+import MatchDetail from './MatchDetail'
+import MatchForm from './MatchForm'
+import Stats from './Stats'
 import type { User } from './session'
 import './styles.css'
 
@@ -19,8 +23,13 @@ function App() {
   const heading = useRef<HTMLHeadingElement>(null)
   const [route, query = ''] = path.split('?')
   const gameId = route.match(/^\/catalogo\/([1-9]\d*)$/)?.[1]
-  const page = pages.find((page) => page.path === (gameId ? '/catalogo' : route))
-  const title = gameId ? 'Detalle del juego' : page?.title ?? 'Página no encontrada'
+  const matchId = route.match(/^\/partidas\/([1-9]\d*)$/)?.[1]
+  const newMatch = route === '/partidas/nueva'
+  const page = pages.find((page) => page.path === (gameId ? '/catalogo' : matchId || newMatch ? '/partidas' : route))
+  const title = gameId ? 'Detalle del juego'
+    : matchId ? 'Detalle de la partida'
+    : newMatch ? 'Registrar partida'
+    : page?.title ?? 'Página no encontrada'
 
   useEffect(() => {
     const onHashChange = () => setPath(window.location.hash.slice(1) || '/catalogo')
@@ -61,6 +70,10 @@ function App() {
         <h1 id="section-title" ref={heading} tabIndex={-1}>{title}</h1>
         {gameId ? <GameDetail key={gameId} id={gameId} query={query} />
           : route === '/catalogo' ? <Catalog query={query} />
+          : matchId ? <MatchDetail key={matchId} id={matchId} user={user} />
+          : newMatch ? <MatchForm user={user} />
+          : route === '/partidas' ? <Matches user={user} />
+          : route === '/estadisticas' ? <Stats user={user} />
           : <p>{page ? 'Todavía no disponible.' : 'Esta dirección no corresponde a ninguna sección.'}</p>}
         {!page && <a href="#/catalogo">Volver al catálogo</a>}
       </section>
