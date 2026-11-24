@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Login from './Login'
 import Catalog from './Catalog'
 import GameDetail from './GameDetail'
+import Collection from './Collection'
 import Matches from './Matches.tsx'
 import MatchDetail from './MatchDetail'
 import MatchForm from './MatchForm'
@@ -68,8 +69,9 @@ function App() {
       </nav>
       <section className="section-page" aria-labelledby="section-title">
         <h1 id="section-title" ref={heading} tabIndex={-1}>{title}</h1>
-        {gameId ? <GameDetail key={gameId} id={gameId} query={query} />
-          : route === '/catalogo' ? <Catalog query={query} />
+        {gameId ? <GameDetail key={gameId} id={gameId} query={query} user={user} />
+          : route === '/catalogo' ? <Catalog query={query} user={user} />
+          : route === '/coleccion' ? <Collection user={user} />
           : matchId ? <MatchDetail key={matchId} id={matchId} user={user} />
           : newMatch ? <MatchForm user={user} />
           : route === '/partidas' ? <Matches user={user} />

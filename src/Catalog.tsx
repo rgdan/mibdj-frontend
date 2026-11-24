@@ -2,10 +2,18 @@ import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { getCategories, getGames } from './games'
 import type { Category, Game } from './games'
+import CollectionActions from './CollectionActions'
+import { getCollection } from './collection-api'
+import type { CollectionItem } from './collection-api'
+import type { User } from './session'
 
-function Catalog({ query }: { query: string }) {
+function Catalog({ query, user }: { query: string; user: User }) {
   const [games, setGames] = useState<Game[]>([])
   const [categories, setCategories] = useState<Category[]>([])
+  const [collection, setCollection] = useState<CollectionItem[]>([])
+  const [collectionLoading, setCollectionLoading] = useState(true)
+  const [collectionError, setCollectionError] = useState(false)
+  const [collectionAttempt, setCollectionAttempt] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [attempt, setAttempt] = useState(0)
@@ -27,6 +35,25 @@ function Catalog({ query }: { query: string }) {
       .finally(() => { if (!controller.signal.aborted) setLoading(false) })
     return () => controller.abort()
   }, [query, attempt])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    setCollectionLoading(true)
+    setCollectionError(false)
+    getCollection(user.id, controller.signal)
+      .then(items => { if (!controller.signal.aborted) setCollection(items) })
+      .catch(() => { if (!controller.signal.aborted) setCollectionError(true) })
+      .finally(() => { if (!controller.signal.aborted) setCollectionLoading(false) })
+    return () => controller.abort()
+  }, [user.id, collectionAttempt])
+
+  function updateCollection(gameId: number, updated: CollectionItem | null) {
+    setCollection(items => updated
+      ? items.some(item => item.gameId === gameId)
+        ? items.map(item => item.gameId === gameId ? updated : item)
+        : [...items, updated]
+      : items.filter(item => item.gameId !== gameId))
+  }
 
   function search(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -60,6 +87,10 @@ function Catalog({ query }: { query: string }) {
     </form>
 
     <div aria-busy={loading}>
+      {collectionError && <div role="alert" className="catalog-message">
+        <p>No pudimos consultar tu colección; las acciones de colección están pausadas.</p>
+        <button type="button" onClick={() => setCollectionAttempt(attempt => attempt + 1)}>Reintentar</button>
+      </div>}
       {loading ? <p role="status">Cargando juegos…</p>
         : error ? <div role="alert" className="catalog-message">
           <p>No pudimos cargar el catálogo. Comprobá la conexión e intentá de nuevo.</p>
@@ -77,6 +108,13 @@ function Catalog({ query }: { query: string }) {
                 <ul className="game-categories" aria-label={`Categorías de ${game.title}`}>
                   {game.categories.map(category => <li key={category.id}>{category.name}</li>)}
                 </ul>
+                <CollectionActions
+                  userId={user.id}
+                  gameId={game.id}
+                  item={collection.find(item => item.gameId === game.id) ?? null}
+                  disabled={collectionLoading || collectionError}
+                  onChange={updated => updateCollection(game.id, updated)}
+                />
               </article>
             </li>)}
           </ul>
