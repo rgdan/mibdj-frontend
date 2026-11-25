@@ -1,12 +1,6 @@
 import { apiFetch } from '../api/client'
 
-export type User = {
-  id: number
-  name: string
-  email: string
-  country: string
-  date: string
-}
+import type { User } from '../users/users-api'
 
 export async function login(email: string, signal: AbortSignal): Promise<User> {
   const response = await apiFetch('/api/v1/session', {

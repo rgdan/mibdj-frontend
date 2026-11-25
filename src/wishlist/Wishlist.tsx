@@ -3,7 +3,7 @@ import WishlistActions from './WishlistActions'
 import { getWishlist, removeWishlistItem } from './wishlist-api'
 import type { WishlistItem } from './wishlist-api'
 import { getCollection } from '../collection/collection-api'
-import type { User } from '../auth/session'
+import type { User } from '../users/users-api'
 
 function sortWishlist(items: WishlistItem[]) {
   return [...items].sort((a, b) => b.priority - a.priority || b.date.localeCompare(a.date))

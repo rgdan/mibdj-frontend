@@ -4,11 +4,11 @@ import Catalog from './catalog/Catalog'
 import GameDetail from './catalog/GameDetail'
 import Collection from './collection/Collection'
 import Wishlist from './wishlist/Wishlist'
-import Matches from './matches/Matches.tsx'
+import Matches from './matches/Matches'
 import MatchDetail from './matches/MatchDetail'
 import MatchForm from './matches/MatchForm'
 import Stats from './stats/Stats'
-import type { User } from './auth/session'
+import type { User } from './users/users-api'
 import './styles.css'
 
 const pages = [

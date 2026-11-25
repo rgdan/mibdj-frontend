@@ -1,7 +1,7 @@
 import { apiFetch } from '../api/client'
 import { errorMessage } from '../api/errors'
 
-export type PersonalRating = {
+export type PersonalRatingData = {
   userId: number
   userName: string
   gameId: number
@@ -14,7 +14,7 @@ export async function getPersonalRating(
   userId: number,
   gameId: number,
   signal: AbortSignal,
-): Promise<PersonalRating | null> {
+): Promise<PersonalRatingData | null> {
   const response = await apiFetch(`/api/v1/users/${userId}/ratings/${gameId}`, { signal })
   if (response.status === 404) return null
   if (!response.ok) throw new Error(await errorMessage(response, 'No se pudo consultar tu valoración.'))
@@ -27,7 +27,7 @@ export async function savePersonalRating(
   rating: number,
   comment: string,
   signal: AbortSignal,
-): Promise<PersonalRating> {
+): Promise<PersonalRatingData> {
   const response = await apiFetch(`/api/v1/users/${userId}/ratings/${gameId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },

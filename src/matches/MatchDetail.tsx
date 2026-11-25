@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { getMatch, getUsers, joinNames, plural } from './matches'
+import { getMatch } from './matches-api'
+import { getUsers } from '../users/users-api'
+import { joinNames, plural } from '../shared/text'
 import { formatDate } from '../shared/dates'
-import type { Match } from './matches'
-import type { User } from '../auth/session'
+import type { Match } from './matches-api'
+import type { User } from '../users/users-api'
 
 // Detalle de una partida: datos generales, puntos de cada participante y ganadores.
 function MatchDetail({ id, user }: { id: string; user: User }) {

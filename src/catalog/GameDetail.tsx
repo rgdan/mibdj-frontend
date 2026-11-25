@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { getGame } from './games'
-import type { Game } from './games'
+import { getGame } from './catalog-api'
+import type { Game } from './catalog-api'
 import CollectionActions from '../collection/CollectionActions'
 import { getCollectionItem } from '../collection/collection-api'
 import type { CollectionItem } from '../collection/collection-api'
@@ -8,7 +8,7 @@ import WishlistActions from '../wishlist/WishlistActions'
 import { getWishlistItem, removeWishlistItem } from '../wishlist/wishlist-api'
 import type { WishlistItem } from '../wishlist/wishlist-api'
 import PersonalRating from '../ratings/PersonalRating'
-import type { User } from '../auth/session'
+import type { User } from '../users/users-api'
 
 function GameDetail({ id, query, user }: { id: string; query: string; user: User }) {
   const [game, setGame] = useState<Game | null>(null)

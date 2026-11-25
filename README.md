@@ -93,22 +93,26 @@ Búsqueda por título y categoría, detalle de juegos y acciones de colección y
 
 ## Estructura
 
-Cada funcionalidad agrupa sus pantallas, tipos y llamadas a la API.
+Cada funcionalidad agrupa sus componentes (`.tsx`) y su módulo de API (`*-api.ts`),
+que contiene las consultas al backend y sus tipos. `api/` reúne el cliente HTTP
+y la lectura de errores compartida.
 
 ```text
 src/
 ├── App.tsx         Navegación y usuario activo
 ├── main.tsx        Entrada de la aplicación
 ├── styles.css      Estilos compartidos
-├── api/            Cliente HTTP y URL del backend
+├── api/            Cliente HTTP y mensajes de error
 ├── auth/           Acceso por email
+├── users/          Consultas y tipo compartido de usuario
+├── places/         Consultas y tipos de lugares
 ├── catalog/        Catálogo y detalle de juegos
 ├── collection/     Colección personal
 ├── wishlist/       Lista de deseos
 ├── ratings/        Valoración y comentario
 ├── matches/        Registro, historial y detalle de partidas
 ├── stats/          Estadísticas por usuario
-└── shared/         Funciones de fechas
+└── shared/         Funciones de fechas y texto
 ```
 
 Los endpoints y sus contratos están en la [referencia de la API del backend](https://github.com/rgdan/mibdj-backend/blob/main/docs/api.md).

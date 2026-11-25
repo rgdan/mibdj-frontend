@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SubmitEvent } from 'react'
-import { getCategories, getGames } from './games'
-import type { Category, Game } from './games'
+import { getCategories, getGames } from './catalog-api'
+import type { Category, Game } from './catalog-api'
 import CollectionActions from '../collection/CollectionActions'
 import { getCollection } from '../collection/collection-api'
 import type { CollectionItem } from '../collection/collection-api'
 import WishlistActions from '../wishlist/WishlistActions'
 import { getWishlist, getWishlistItem, removeWishlistItem } from '../wishlist/wishlist-api'
 import type { WishlistItem } from '../wishlist/wishlist-api'
-import type { User } from '../auth/session'
+import type { User } from '../users/users-api'
 
 function Catalog({ query, user }: { query: string; user: User }) {
   const [games, setGames] = useState<Game[]>([])

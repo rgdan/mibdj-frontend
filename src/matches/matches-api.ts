@@ -1,6 +1,5 @@
 import { apiFetch } from '../api/client'
 import { errorMessage } from '../api/errors'
-import type { User } from '../auth/session'
 
 export type Participant = {
   userId: number
@@ -20,12 +19,6 @@ export type Match = {
   notas?: string
   participantesCount?: number
   participantes?: Participant[]
-}
-
-export type Place = {
-  placeId: number
-  name: string
-  address: string
 }
 
 export type NewMatch = {
@@ -68,25 +61,4 @@ export async function createMatch(userId: number, match: NewMatch, signal: Abort
     throw new Error(await errorMessage(response, fallback))
   }
   return response.json()
-}
-
-export async function getPlaces(userId: number, signal: AbortSignal): Promise<Place[]> {
-  const response = await apiFetch(`/api/v1/users/${userId}/places`, { signal })
-  if (!response.ok) throw new Error('No se pudieron cargar los lugares.')
-  return response.json()
-}
-
-export async function getUsers(signal: AbortSignal): Promise<User[]> {
-  const response = await apiFetch('/api/v1/users', { signal })
-  if (!response.ok) throw new Error('No se pudieron cargar los usuarios.')
-  return response.json()
-}
-
-export function plural(count: number, singular: string, pluralForm = `${singular}s`) {
-  return `${count} ${count === 1 ? singular : pluralForm}`
-}
-
-export function joinNames(names: string[]) {
-  if (names.length <= 1) return names.join('')
-  return `${names.slice(0, -1).join(', ')} y ${names[names.length - 1]}`
 }

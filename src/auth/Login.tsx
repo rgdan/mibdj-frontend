@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SubmitEvent } from 'react'
-import { login } from './session'
-import type { User } from './session'
+import { login } from './auth-api'
+import type { User } from '../users/users-api'
 
 function Login({ onLogin }: { onLogin: (user: User) => void }) {
   const [pending, setPending] = useState(false)

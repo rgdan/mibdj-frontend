@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { getMatches, plural } from './matches'
+import { getMatches } from './matches-api'
+import { plural } from '../shared/text'
 import { formatDate } from '../shared/dates'
-import type { Match } from './matches'
-import type { User } from '../auth/session'
+import type { Match } from './matches-api'
+import type { User } from '../users/users-api'
 
 // Historial: partidas que el usuario organizó o en las que participó.
 function Matches({ user }: { user: User }) {

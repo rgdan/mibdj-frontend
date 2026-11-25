@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SubmitEvent } from 'react'
-import { getGames } from '../catalog/games'
-import type { Game } from '../catalog/games'
-import { NOTES_MAX_LENGTH, createMatch, getPlaces, getUsers, plural } from './matches'
+import { getGames } from '../catalog/catalog-api'
+import type { Game } from '../catalog/catalog-api'
+import { NOTES_MAX_LENGTH, createMatch } from './matches-api'
+import { getPlaces } from '../places/places-api'
+import type { Place } from '../places/places-api'
+import { getUsers } from '../users/users-api'
+import { plural } from '../shared/text'
 import { formatDate, todayIso } from '../shared/dates'
-import type { Match, Place } from './matches'
-import type { User } from '../auth/session'
+import type { Match } from './matches-api'
+import type { User } from '../users/users-api'
 
 type Row = { key: number; userId: number; puntos: string; ganador: boolean }
 
