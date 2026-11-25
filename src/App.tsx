@@ -8,6 +8,7 @@ import Matches from './matches/Matches'
 import MatchDetail from './matches/MatchDetail'
 import MatchForm from './matches/MatchForm'
 import Stats from './stats/Stats'
+import Places from './places/Places'
 import type { User } from './users/users-api'
 import './styles.css'
 
@@ -16,6 +17,7 @@ const pages = [
   { path: '/coleccion', title: 'Colección' },
   { path: '/deseos', title: 'Deseos' },
   { path: '/partidas', title: 'Partidas' },
+  { path: '/lugares', title: 'Lugares' },
   { path: '/estadisticas', title: 'Estadísticas' },
 ]
 
@@ -77,6 +79,7 @@ function App() {
           : matchId ? <MatchDetail key={matchId} id={matchId} user={user} />
           : newMatch ? <MatchForm user={user} />
           : route === '/partidas' ? <Matches user={user} />
+          : route === '/lugares' ? <Places key={user.id} user={user} />
           : route === '/estadisticas' ? <Stats user={user} />
           : <p>{page ? 'Todavía no disponible.' : 'Esta dirección no corresponde a ninguna sección.'}</p>}
         {!page && <a href="#/catalogo">Volver al catálogo</a>}

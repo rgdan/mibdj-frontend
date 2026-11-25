@@ -199,7 +199,7 @@ function MatchForm({ user }: { user: User }) {
     <a className="catalog-back" href="#/partidas">Volver al historial</a>
 
     {places.length === 0 && <p role="status" className="form-notice">
-      Todavía no tenés lugares registrados, así que no podés organizar partidas. Igual podés aparecer en las partidas que registren otros usuarios.
+      Todavía no tenés lugares registrados. <a href="#/lugares">Creá un lugar</a> antes de registrar una partida.
     </p>}
 
     <form className="match-form" onSubmit={submit} noValidate aria-busy={pending}>
