@@ -12,7 +12,8 @@
 
 Un catálogo de juegos de mesa con colección personal, lista de deseos y
 valoraciones. Registrá partidas con participantes, puntos y ganadores;
-consultá el historial y las estadísticas de cada usuario.
+consultá el historial y las estadísticas de cada usuario. Guardá también los
+lugares donde jugás para elegirlos al registrar una partida.
 
 [Inicio local](#inicio-local) · [Pantallas](#pantallas) · [Estructura](#estructura)
 
@@ -64,6 +65,15 @@ Búsqueda por título y categoría, detalle de juegos y acciones de colección y
 </details>
 
 <details>
+<summary>Crear lugares</summary>
+
+Nombre y dirección de tus lugares, en una sección independiente del registro de partidas.
+
+![Sección Lugares con el formulario de nombre y dirección y la lista de lugares de Ana](docs/screenshots/lugares.png)
+
+</details>
+
+<details>
 <summary>Historial de partidas</summary>
 
 ![Historial con fecha, juego, lugar y cantidad de participantes de cada partida](docs/screenshots/partidas.png)
@@ -105,7 +115,7 @@ src/
 ├── api/            Cliente HTTP y mensajes de error
 ├── auth/           Acceso por email
 ├── users/          Consultas y tipo compartido de usuario
-├── places/         Consultas y tipos de lugares
+├── places/         Lista y creación de lugares
 ├── catalog/        Catálogo y detalle de juegos
 ├── collection/     Colección personal
 ├── wishlist/       Lista de deseos
