@@ -1,45 +1,114 @@
-# MiBDJ · Frontend
+<div align="center">
 
-Interfaz de Mi base de datos de juegos de mesa, hecha con React, TypeScript y Vite.
+<h1>MiBDJ</h1>
+<p>Mi base de datos de juegos de mesa</p>
+<p><strong>Frontend · React · TypeScript · Vite</strong></p>
 
-## Ejecutar en local
+[Configurar el proyecto](docs/setup.md) · [Ver las pantallas](#pantallas) · [Ver el backend](https://github.com/rgdan/mibdj-backend)
 
-Con Node.js y npm instalados:
+</div>
 
-```sh
-npm install
-cp .env.example .env
-npm run dev
+---
+
+Un catálogo de juegos de mesa con colección personal, lista de deseos y
+valoraciones. Registrá partidas con participantes, puntos y ganadores;
+consultá el historial y las estadísticas de cada usuario.
+
+[Inicio local](#inicio-local) · [Pantallas](#pantallas) · [Estructura](#estructura)
+
+## Inicio local
+
+[Instalar, configurar la API y arrancar el frontend](docs/setup.md).
+
+Con el backend activo, entrá con el email de un usuario precargado, como
+`ana.mora@gmail.com`. No se pide contraseña. `Salir` limpia el usuario activo;
+al recargar la página hay que volver a entrar.
+
+## Pantallas
+
+Capturas reales en escritorio, con los datos de ejemplo del backend y el
+perfil de Ana Mora. Cada imagen se puede abrir en su tamaño original.
+
+### Catálogo
+
+Búsqueda por título y categoría, detalle de juegos y acciones de colección y deseos.
+
+![Catálogo filtrado por Catan y la categoría Estrategia, con su estado en la colección](docs/screenshots/catalogo.png)
+
+<details>
+<summary>Acceso por email</summary>
+
+![Pantalla de acceso con un campo de email y el botón Entrar](docs/screenshots/acceso.png)
+
+</details>
+
+<details>
+<summary>Detalle del juego y valoración personal</summary>
+
+![Detalle de Catan con sus categorías, estado en la colección y valoración de Ana](docs/screenshots/detalle-juego.png)
+
+</details>
+
+<details>
+<summary>Colección personal</summary>
+
+![Colección de Ana con fechas de adquisición, estados y acciones para editar o quitar juegos](docs/screenshots/coleccion.png)
+
+</details>
+
+<details>
+<summary>Lista de deseos</summary>
+
+![Lista de deseos ordenada por prioridad con acciones para cambiarla o quitar juegos](docs/screenshots/deseos.png)
+
+</details>
+
+<details>
+<summary>Historial de partidas</summary>
+
+![Historial con fecha, juego, lugar y cantidad de participantes de cada partida](docs/screenshots/partidas.png)
+
+</details>
+
+<details>
+<summary>Registro de una partida</summary>
+
+![Formulario para elegir juego, lugar, fecha y duración, y registrar participantes, puntos y ganadores](docs/screenshots/registrar-partida.png)
+
+</details>
+
+<details>
+<summary>Detalle de una partida</summary>
+
+![Detalle de una partida cooperativa de Pandemic con sus participantes, puntos y ganadores](docs/screenshots/detalle-partida.png)
+
+</details>
+
+<details>
+<summary>Estadísticas</summary>
+
+![Estadísticas de juegos más jugados, duración promedio y compañeros frecuentes](docs/screenshots/estadisticas.png)
+
+</details>
+
+## Estructura
+
+Cada funcionalidad agrupa sus pantallas, tipos y llamadas a la API.
+
+```text
+src/
+├── App.tsx         Navegación y usuario activo
+├── main.tsx        Entrada de la aplicación
+├── styles.css      Estilos compartidos
+├── api/            Cliente HTTP y URL del backend
+├── auth/           Acceso por email
+├── catalog/        Catálogo y detalle de juegos
+├── collection/     Colección personal
+├── wishlist/       Lista de deseos
+├── ratings/        Valoración y comentario
+├── matches/        Registro, historial y detalle de partidas
+├── stats/          Estadísticas por usuario
+└── shared/         Funciones de fechas
 ```
 
-Abrí la dirección que aparece en la terminal.
-
-En `.env`, `VITE_API_URL` indica la dirección del backend:
-
-```dotenv
-VITE_API_URL=http://localhost:8080
-```
-
-Si cambiás esa dirección, reiniciá `npm run dev`. Para producción, configurala
-antes de ejecutar el build. Las variables `VITE_` quedan visibles en el navegador;
-no pongás contraseñas ni secretos en ellas.
-
-Para generar la versión de producción: `npm run build`.
-
-## Acceso
-
-Con el backend y MySQL corriendo, entrá con el email de un usuario precargado,
-por ejemplo `ana.mora@gmail.com`. No se pide contraseña.
-
-Las secciones aparecen después de entrar. `Salir` limpia el usuario activo.
-El acceso se mantiene en memoria; al recargar la página hay que volver a entrar.
-El catálogo permite buscar por título, filtrar por categoría y abrir el detalle
-de un juego. Desde el catálogo o el detalle podés agregarlo a tu colección con
-fecha y estado; en `Colección` podés editar esos datos o quitarlo con confirmación.
-También podés agregar juegos a `Deseos`, asignarles prioridad alta, media o baja,
-cambiarla y quitarlos; la lista se ordena de mayor a menor prioridad. Los filtros
-se conservan al volver del detalle. Partidas y estadísticas siguen en desarrollo.
-
-## Backend
-
-[rgdan/mibdj-backend](https://github.com/rgdan/mibdj-backend)
+Los endpoints y sus contratos están en la [referencia de la API del backend](https://github.com/rgdan/mibdj-backend/blob/main/docs/api.md).
