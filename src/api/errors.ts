@@ -1,3 +1,4 @@
+// Lee el mensaje de una respuesta HTTP fallida; usa el texto de respaldo si no es legible.
 export async function errorMessage(response: Response, fallback: string) {
   try {
     const body = await response.json()
@@ -11,6 +12,7 @@ export async function errorMessage(response: Response, fallback: string) {
   return fallback
 }
 
+// Convierte un error capturado en texto para la pantalla; reemplaza los errores de red por el respaldo.
 export function userErrorMessage(
   error: unknown,
   fallback = 'No pudimos conectar con el servidor. Intentá de nuevo.',
