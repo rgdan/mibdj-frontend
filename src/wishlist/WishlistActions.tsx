@@ -69,6 +69,7 @@ function WishlistActions({
 
   async function remove() {
     if (request.current || disabled) return
+    if (!window.confirm(`¿Querés quitar ${item?.title ?? 'este juego'} de tus deseos?`)) return
     const controller = new AbortController()
     request.current = controller
     setPending(true)
