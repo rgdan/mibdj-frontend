@@ -61,6 +61,32 @@ button, input, select, textarea { font: inherit; }
 .game-detail h3 { margin: 28px 0 12px; }
 .game-actions { border-top: 1px solid var(--ink); margin-top: 32px; }
 .game-actions p { max-width: 55ch; }
+.collection-actions { margin-top: 18px; }
+.collection-meta { display: flex; flex-wrap: wrap; gap: 4px 18px; font-weight: 600; }
+.collection-meta span + span::before { content: '·'; margin-right: 18px; }
+.collection-buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+.collection-buttons button { width: auto; min-height: 44px; margin: 0; padding: 10px 18px; }
+.collection-buttons .link-button:not(:disabled) { padding: 10px 6px; }
+.collection-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; gap: 16px; }
+.collection-form > div { min-width: 0; }
+.collection-form input, .collection-form select { width: 100%; min-width: 0; min-height: 48px; padding: 10px; border: 1.5px solid var(--ink); border-radius: 6px; color: var(--ink); background: #fffcf4; font-size: 16px; }
+.collection-form .collection-buttons { grid-column: 1 / -1; }
+.collection-list .collection-actions { max-width: 650px; }
+.wishlist-actions { margin-top: 18px; }
+.wishlist-meta { font-weight: 600; }
+.wishlist-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 16px; max-width: 650px; }
+.wishlist-form > div { min-width: 0; }
+.wishlist-form select { width: 100%; min-width: 0; min-height: 48px; padding: 10px; border: 1.5px solid var(--ink); border-radius: 6px; color: var(--ink); background: #fffcf4; font-size: 16px; }
+.wishlist-form .collection-buttons { justify-content: flex-start; }
+.personal-rating { border-top: 1px solid var(--ink); margin-top: 32px; padding-top: 4px; }
+.rating-form { display: grid; gap: 16px; max-width: 650px; }
+.rating-form > div { min-width: 0; }
+.rating-form input, .rating-form textarea { width: 100%; min-width: 0; min-height: 48px; padding: 10px; border: 1.5px solid var(--ink); border-radius: 6px; color: var(--ink); background: #fffcf4; font-size: 16px; }
+.rating-form textarea { resize: vertical; line-height: 1.5; }
+.rating-comment { white-space: pre-line; overflow-wrap: anywhere; }
+.rating-form .field-hint { margin: 6px 0 0; }
+.collection-empty { padding: 20px 0; }
+.collection-empty p { margin-bottom: 12px; }
 .catalog-message button { width: auto; min-height: 44px; margin: 0; padding: 10px 20px; }
 .play-table { position: relative; min-height: 640px; border: 2px solid var(--ink); border-radius: 24px; background: var(--green); isolation: isolate; }
 .table-art { position: absolute; inset: 0; overflow: hidden; border-radius: 22px; pointer-events: none; }
@@ -172,6 +198,9 @@ button:not(:disabled):hover { box-shadow: 2px 3px 0 var(--ink); }
   .app-page { padding: 28px 20px; }
   .catalog-filters { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .catalog-filters label { font-size: 16px; }
+  .collection-form { grid-template-columns: minmax(0, 1fr); }
+  .collection-form .collection-buttons { grid-column: auto; }
+  .wishlist-form { grid-template-columns: minmax(0, 1fr); }
   .game-facts { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .login-page { padding: 28px 20px; }
   .login-shell { width: min(100%, 540px); }
