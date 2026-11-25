@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { userErrorMessage } from '../api/errors'
 import { addWishlistItem, removeWishlistItem, updateWishlistItem } from './wishlist-api'
 import type { WishlistItem, WishlistPriority } from './wishlist-api'
+import { VALIDATION_MESSAGE } from '../shared/text'
 
 const priorities: { value: WishlistPriority; label: string }[] = [
   { value: 3, label: 'Alta' },
@@ -28,12 +29,15 @@ function WishlistActions({
   const [editing, setEditing] = useState(false)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState('')
+  const [priorityError, setPriorityError] = useState('')
+  const alertRef = useRef<HTMLParagraphElement>(null)
   const request = useRef<AbortController | null>(null)
 
   useEffect(() => {
     setPriority(item?.priority ?? 2)
     setEditing(false)
     setError('')
+    setPriorityError('')
   }, [item?.gameId, item?.priority])
 
   useEffect(() => () => request.current?.abort(), [])
@@ -42,6 +46,14 @@ function WishlistActions({
 
   async function save() {
     if (request.current || disabled) return
+
+    const invalid = !priorities.some(option => option.value === priority)
+    setPriorityError(invalid ? 'Elegí una prioridad válida.' : '')
+    if (invalid) {
+      setError(VALIDATION_MESSAGE)
+      requestAnimationFrame(() => alertRef.current?.focus())
+      return
+    }
 
     const controller = new AbortController()
     request.current = controller
@@ -58,6 +70,7 @@ function WishlistActions({
     } catch (error) {
       if (!controller.signal.aborted) {
         setError(userErrorMessage(error))
+        requestAnimationFrame(() => alertRef.current?.focus())
       }
     } finally {
       if (request.current === controller) {
@@ -80,6 +93,7 @@ function WishlistActions({
     } catch (error) {
       if (!controller.signal.aborted) {
         setError(userErrorMessage(error))
+        requestAnimationFrame(() => alertRef.current?.focus())
       }
     } finally {
       if (request.current === controller) {
@@ -93,9 +107,11 @@ function WishlistActions({
     setPriority(item?.priority ?? 2)
     setEditing(false)
     setError('')
+    setPriorityError('')
   }
 
   return <div className="wishlist-actions">
+    {error && <p ref={alertRef} tabIndex={-1} className="form-alert" role="alert">{error}</p>}
     {item && !editing ? <>
       <p className="wishlist-meta">Deseo · Prioridad {priorities.find(option => option.value === item.priority)?.label ?? item.priority}</p>
       <div className="collection-buttons">
@@ -104,7 +120,7 @@ function WishlistActions({
       </div>
     </> : !item && !editing
       ? <button type="button" disabled={pending || disabled} onClick={() => setEditing(true)}>Agregar a deseos</button>
-      : <form className="wishlist-form" onSubmit={event => { event.preventDefault(); void save() }} aria-busy={pending}>
+      : <form className="wishlist-form" onSubmit={event => { event.preventDefault(); void save() }} noValidate aria-busy={pending}>
         <div>
           <label htmlFor={`wishlist-priority-${gameId}`}>Prioridad</label>
           <select
@@ -112,16 +128,18 @@ function WishlistActions({
             value={priority}
             disabled={pending || disabled}
             onChange={event => setPriority(Number(event.target.value) as WishlistPriority)}
+            aria-invalid={!!priorityError}
+            aria-describedby={priorityError ? `wishlist-priority-error-${gameId}` : undefined}
           >
             {priorities.map(option => <option value={option.value} key={option.value}>{option.label}</option>)}
           </select>
+          {priorityError && <p id={`wishlist-priority-error-${gameId}`} className="field-error">{priorityError}</p>}
         </div>
         <div className="collection-buttons">
           <button type="submit" disabled={pending || disabled}>{pending ? 'Guardando…' : item ? 'Guardar prioridad' : 'Confirmar'}</button>
           <button type="button" className="link-button" disabled={pending || disabled} onClick={cancel}>Cancelar</button>
         </div>
       </form>}
-    {error && <p className="form-alert" role="alert">{error}</p>}
   </div>
 }
 

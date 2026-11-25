@@ -10,3 +10,11 @@ export function todayIso() {
   const pad = (value: number) => String(value).padStart(2, '0')
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
 }
+
+export function isValidDate(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
+  const date = new Date(`${value}T00:00:00`)
+  const [year, month, day] = value.split('-').map(Number)
+  return year > 0 && date.getFullYear() === year
+    && date.getMonth() === month - 1 && date.getDate() === day
+}

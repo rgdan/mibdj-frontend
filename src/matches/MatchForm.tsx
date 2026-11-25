@@ -7,8 +7,8 @@ import { NOTES_MAX_LENGTH, createMatch } from './matches-api'
 import { getPlaces } from '../places/places-api'
 import type { Place } from '../places/places-api'
 import { getUsers } from '../users/users-api'
-import { plural } from '../shared/text'
-import { formatDate, todayIso } from '../shared/dates'
+import { plural, VALIDATION_MESSAGE } from '../shared/text'
+import { formatDate, isValidDate, todayIso } from '../shared/dates'
 import type { Match } from './matches-api'
 import type { User } from '../users/users-api'
 
@@ -102,7 +102,7 @@ function MatchForm({ user }: { user: User }) {
     const found: Errors = {}
     if (!gameId) found.gameId = 'Elegí un juego.'
     if (!placeId) found.placeId = 'Elegí dónde se jugó.'
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) found.fecha = 'Ingresá una fecha válida.'
+    if (!isValidDate(fecha)) found.fecha = 'Ingresá una fecha válida.'
     else if (fecha > todayIso()) found.fecha = 'La fecha no puede ser futura.'
     const duration = duracion.trim()
     if (!duration) found.duracion = 'Ingresá la duración en minutos.'
@@ -204,7 +204,7 @@ function MatchForm({ user }: { user: User }) {
 
     <form className="match-form" onSubmit={submit} noValidate aria-busy={pending}>
       {(submitError || hasErrors) && <div ref={alertRef} tabIndex={-1} role="alert" className="form-alert">
-        {submitError || 'Revisá los campos marcados antes de guardar.'}
+        {submitError || VALIDATION_MESSAGE}
       </div>}
 
       <fieldset disabled={pending || places.length === 0}>

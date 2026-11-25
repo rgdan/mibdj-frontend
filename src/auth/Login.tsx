@@ -3,10 +3,13 @@ import type { SubmitEvent } from 'react'
 import { userErrorMessage } from '../api/errors'
 import { login } from './auth-api'
 import type { User } from '../users/users-api'
+import { VALIDATION_MESSAGE } from '../shared/text'
 
 function Login({ onLogin }: { onLogin: (user: User) => void }) {
   const [pending, setPending] = useState(false)
   const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const alertRef = useRef<HTMLParagraphElement>(null)
   const request = useRef<AbortController | null>(null)
 
   useEffect(() => () => request.current?.abort(), [])
@@ -15,7 +18,16 @@ function Login({ onLogin }: { onLogin: (user: User) => void }) {
     event.preventDefault()
     if (request.current) return
 
-    const email = String(new FormData(event.currentTarget).get('email') ?? '')
+    const input = event.currentTarget.elements.namedItem('email') as HTMLInputElement
+    const email = input.value.trim()
+    const invalid = !email ? 'Ingresá tu email.'
+      : input.validity.typeMismatch ? 'Ingresá un email válido.' : ''
+    setEmailError(invalid)
+    if (invalid) {
+      setError(VALIDATION_MESSAGE)
+      requestAnimationFrame(() => alertRef.current?.focus())
+      return
+    }
     const controller = new AbortController()
     request.current = controller
     setPending(true)
@@ -27,6 +39,7 @@ function Login({ onLogin }: { onLogin: (user: User) => void }) {
     } catch (error) {
       if (!controller.signal.aborted) {
         setError(userErrorMessage(error))
+        requestAnimationFrame(() => alertRef.current?.focus())
       }
     } finally {
       if (request.current === controller) {
@@ -53,10 +66,11 @@ function Login({ onLogin }: { onLogin: (user: User) => void }) {
         <section className="access-card" aria-labelledby="access-title">
           <h1 id="access-title">Primero,<br />tu email.</h1>
           <p className="access-description">Tu lugar en la mesa empieza acá.</p>
-          <form onSubmit={submit} aria-busy={pending}>
+          <form onSubmit={submit} noValidate aria-busy={pending}>
+            {error && <p ref={alertRef} tabIndex={-1} className="form-alert" role="alert">{error}</p>}
             <label htmlFor="email">Email</label>
-            <input id="email" name="email" type="email" autoComplete="email" placeholder="Tu email" spellCheck={false} required disabled={pending} aria-describedby={error ? 'access-error' : undefined} />
-            {error && <p id="access-error" className="access-error" role="alert">{error}</p>}
+            <input id="email" name="email" type="email" autoComplete="email" placeholder="Tu email" spellCheck={false} required disabled={pending} aria-invalid={!!emailError} aria-describedby={emailError ? 'email-error' : undefined} />
+            {emailError && <p id="email-error" className="field-error">{emailError}</p>}
             <button type="submit" disabled={pending}>{pending ? 'Entrando…' : 'Entrar'}</button>
           </form>
         </section>

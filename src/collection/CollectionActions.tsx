@@ -1,13 +1,14 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { SubmitEvent } from 'react'
 import { userErrorMessage } from '../api/errors'
-import { formatDate, todayIso } from '../shared/dates'
+import { formatDate, isValidDate, todayIso } from '../shared/dates'
 import {
   addCollectionItem,
   removeCollectionItem,
   updateCollectionItem,
 } from './collection-api'
 import type { CollectionItem, CollectionStatus } from './collection-api'
+import { VALIDATION_MESSAGE } from '../shared/text'
 
 const statuses: { value: CollectionStatus; label: string }[] = [
   { value: 'nuevo', label: 'Nuevo' },
@@ -36,6 +37,8 @@ function CollectionActions({
   const [editing, setEditing] = useState(false)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState('')
+  const [errors, setErrors] = useState<{ date?: string; status?: string }>({})
+  const alertRef = useRef<HTMLParagraphElement>(null)
   const [cleanupPending, setCleanupPending] = useState(false)
   const [cleanupError, setCleanupError] = useState(false)
   const request = useRef<AbortController | null>(null)
@@ -45,6 +48,7 @@ function CollectionActions({
     setStatus(item?.status ?? 'nuevo')
     setEditing(false)
     setError('')
+    setErrors({})
   }, [item?.date, item?.status, item?.gameId])
 
   useEffect(() => () => request.current?.abort(), [])
@@ -52,6 +56,17 @@ function CollectionActions({
   async function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (request.current || disabled) return
+
+    const found: typeof errors = {}
+    if (!isValidDate(date)) found.date = 'Ingresá una fecha válida.'
+    else if (date > todayIso()) found.date = 'La fecha no puede ser futura.'
+    if (!statuses.some(option => option.value === status)) found.status = 'Elegí un estado válido.'
+    setErrors(found)
+    if (Object.keys(found).length > 0) {
+      setError(VALIDATION_MESSAGE)
+      requestAnimationFrame(() => alertRef.current?.focus())
+      return
+    }
 
     const controller = new AbortController()
     request.current = controller
@@ -79,6 +94,7 @@ function CollectionActions({
     } catch (error) {
       if (!controller.signal.aborted) {
         setError(userErrorMessage(error))
+        requestAnimationFrame(() => alertRef.current?.focus())
       }
     } finally {
       if (request.current === controller) {
@@ -115,6 +131,7 @@ function CollectionActions({
     } catch (error) {
       if (!controller.signal.aborted) {
         setError(userErrorMessage(error))
+        requestAnimationFrame(() => alertRef.current?.focus())
       }
     } finally {
       if (request.current === controller) {
@@ -129,9 +146,11 @@ function CollectionActions({
     setStatus(item?.status ?? 'nuevo')
     setEditing(false)
     setError('')
+    setErrors({})
   }
 
   return <div className="collection-actions">
+    {error && <p ref={alertRef} tabIndex={-1} className="form-alert" role="alert">{error}</p>}
     {item && !editing ? <>
       <p className="collection-meta"><span>Estado: {statuses.find(option => option.value === item.status)?.label ?? item.status}</span><span>Desde: {formatDate(item.date)}</span></p>
       <div className="collection-buttons">
@@ -139,23 +158,24 @@ function CollectionActions({
         <button type="button" className="link-button" disabled={pending || disabled} onClick={remove}>{pending ? 'Quitando…' : 'Quitar de la colección'}</button>
       </div>
     </> : !item && !editing ? <button type="button" disabled={pending || disabled} onClick={() => setEditing(true)}>Adquirir</button>
-      : <form className="collection-form" onSubmit={submit} aria-busy={pending}>
+      : <form className="collection-form" onSubmit={submit} noValidate aria-busy={pending}>
       <div>
         <label htmlFor={`${id}-date`}>Fecha de adquisición</label>
-        <input id={`${id}-date`} type="date" value={date} max={todayIso()} required disabled={pending || disabled} onChange={event => setDate(event.target.value)} />
+        <input id={`${id}-date`} type="date" value={date} max={todayIso()} required disabled={pending || disabled} onChange={event => setDate(event.target.value)} aria-invalid={!!errors.date} aria-describedby={errors.date ? `${id}-date-error` : undefined} />
+        {errors.date && <p id={`${id}-date-error`} className="field-error">{errors.date}</p>}
       </div>
       <div>
         <label htmlFor={`${id}-status`}>Estado</label>
-        <select id={`${id}-status`} value={status} required disabled={pending || disabled} onChange={event => setStatus(event.target.value as CollectionStatus)}>
+        <select id={`${id}-status`} value={status} required disabled={pending || disabled} onChange={event => setStatus(event.target.value as CollectionStatus)} aria-invalid={!!errors.status} aria-describedby={errors.status ? `${id}-status-error` : undefined}>
           {statuses.map(option => <option value={option.value} key={option.value}>{option.label}</option>)}
         </select>
+        {errors.status && <p id={`${id}-status-error`} className="field-error">{errors.status}</p>}
       </div>
       <div className="collection-buttons">
         <button type="submit" disabled={pending || disabled}>{pending ? 'Guardando…' : item ? 'Guardar cambios' : 'Confirmar'}</button>
         <button type="button" className="link-button" disabled={pending || disabled} onClick={cancel}>Cancelar</button>
       </div>
     </form>}
-    {error && <p className="form-alert" role="alert">{error}</p>}
     {cleanupError && <div className="form-alert" role="alert">
       <p>El juego ya está en tu colección, pero no pudimos quitarlo de tus deseos.</p>
       <button type="button" disabled={cleanupPending || disabled} onClick={() => void retryCleanup()}>

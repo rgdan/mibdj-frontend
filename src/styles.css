@@ -128,7 +128,6 @@ button:disabled { cursor: not-allowed; }
 button:not(:disabled) { background: var(--yellow); border-color: var(--ink); color: var(--ink); cursor: pointer; }
 button:not(:disabled):hover { box-shadow: 2px 3px 0 var(--ink); }
 .logout-button:not(:disabled) { width: auto; min-height: 44px; margin: 0; padding: 10px 16px; background: transparent; font-size: 16px; }
-.access-error { margin: 14px 0 0; padding-left: 12px; border-left: 3px solid var(--red); font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
 @keyframes piece-settle { from { transform: translateY(-14px) rotate(-6deg); } to { transform: translateY(0) rotate(0); } }
 
 
@@ -158,12 +157,12 @@ button:not(:disabled):hover { box-shadow: 2px 3px 0 var(--ink); }
 .form-grid > div { min-width: 0; }
 .match-form input, .match-form select, .match-form textarea { width: 100%; min-width: 0; min-height: 54px; padding: 12px; border: 1.5px solid var(--ink); border-radius: 6px; color: var(--ink); background: #fffcf4; font-size: 16px; }
 .match-form textarea { resize: vertical; line-height: 1.5; }
-.match-form [aria-invalid="true"] { border-color: var(--red); box-shadow: 0 0 0 1px var(--red); }
+form [aria-invalid="true"] { border-color: var(--red); box-shadow: 0 0 0 1px var(--red); }
 .match-form fieldset:disabled { opacity: .7; }
 .optional { font-weight: 400; }
 .section-page .field-hint { margin: 8px 0 0; font-size: 15px; color: #3b4558; }
 .section-page fieldset > .field-hint { margin: 0 0 16px; }
-.section-page .field-error { margin: 8px 0 0; padding-left: 10px; border-left: 3px solid var(--red); font-size: 15px; font-weight: 600; }
+.field-error, .section-page .field-error { margin: 8px 0 0; padding-left: 10px; border-left: 3px solid var(--red); font-size: 15px; font-weight: 600; }
 .form-alert { margin-bottom: 24px; padding: 14px 16px; border: 2px solid var(--red); border-radius: 8px; background: #fde9e5; font-weight: 600; overflow-wrap: anywhere; }
 .form-notice { padding: 14px 16px; border-left: 4px solid var(--yellow); background: #fff1c9; }
 .participant-list { list-style: none; margin: 0 0 16px; padding: 0; }
