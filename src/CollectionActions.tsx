@@ -20,12 +20,14 @@ function CollectionActions({
   item,
   disabled = false,
   onChange,
+  onAcquired,
 }: {
   userId: number
   gameId: number
   item: CollectionItem | null
   disabled?: boolean
   onChange: (item: CollectionItem | null) => void
+  onAcquired?: () => Promise<void>
 }) {
   const id = useId()
   const [date, setDate] = useState(item?.date ?? todayIso())
@@ -33,6 +35,8 @@ function CollectionActions({
   const [editing, setEditing] = useState(false)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState('')
+  const [cleanupPending, setCleanupPending] = useState(false)
+  const [cleanupError, setCleanupError] = useState(false)
   const request = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -59,6 +63,17 @@ function CollectionActions({
       if (!controller.signal.aborted) {
         onChange(saved)
         setEditing(false)
+        if (!item && onAcquired) {
+          setCleanupPending(true)
+          setCleanupError(false)
+          try {
+            await onAcquired()
+          } catch {
+            setCleanupError(true)
+          } finally {
+            setCleanupPending(false)
+          }
+        }
       }
     } catch (error) {
       if (!controller.signal.aborted) {
@@ -71,6 +86,19 @@ function CollectionActions({
         request.current = null
         if (!controller.signal.aborted) setPending(false)
       }
+    }
+  }
+
+  async function retryCleanup() {
+    if (!onAcquired || cleanupPending) return
+    setCleanupPending(true)
+    setCleanupError(false)
+    try {
+      await onAcquired()
+    } catch {
+      setCleanupError(true)
+    } finally {
+      setCleanupPending(false)
     }
   }
 
@@ -131,6 +159,12 @@ function CollectionActions({
       </div>
     </form>}
     {error && <p className="form-alert" role="alert">{error}</p>}
+    {cleanupError && <div className="form-alert" role="alert">
+      <p>El juego ya está en tu colección, pero no pudimos quitarlo de tus deseos.</p>
+      <button type="button" disabled={cleanupPending || disabled} onClick={() => void retryCleanup()}>
+        {cleanupPending ? 'Actualizando…' : 'Reintentar'}
+      </button>
+    </div>}
   </div>
 }
 

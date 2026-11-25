@@ -3,6 +3,7 @@ import Login from './Login'
 import Catalog from './Catalog'
 import GameDetail from './GameDetail'
 import Collection from './Collection'
+import Wishlist from './Wishlist'
 import Matches from './Matches.tsx'
 import MatchDetail from './MatchDetail'
 import MatchForm from './MatchForm'
@@ -72,6 +73,7 @@ function App() {
         {gameId ? <GameDetail key={gameId} id={gameId} query={query} user={user} />
           : route === '/catalogo' ? <Catalog query={query} user={user} />
           : route === '/coleccion' ? <Collection user={user} />
+          : route === '/deseos' ? <Wishlist key={user.id} user={user} />
           : matchId ? <MatchDetail key={matchId} id={matchId} user={user} />
           : newMatch ? <MatchForm user={user} />
           : route === '/partidas' ? <Matches user={user} />
