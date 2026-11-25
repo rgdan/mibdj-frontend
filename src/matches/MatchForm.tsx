@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
-import { getGames } from './games'
-import type { Game } from './games'
-import { NOTES_MAX_LENGTH, createMatch, formatDate, getPlaces, getUsers, plural, todayIso } from './matches'
+import { getGames } from '../catalog/games'
+import type { Game } from '../catalog/games'
+import { NOTES_MAX_LENGTH, createMatch, getPlaces, getUsers, plural } from './matches'
+import { formatDate, todayIso } from '../shared/dates'
 import type { Match, Place } from './matches'
-import type { User } from './session'
+import type { User } from '../auth/session'
 
 type Row = { key: number; userId: number; puntos: string; ganador: boolean }
 

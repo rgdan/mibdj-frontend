@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import WishlistActions from './WishlistActions'
 import { getWishlist, removeWishlistItem } from './wishlist-api'
 import type { WishlistItem } from './wishlist-api'
-import { getCollection } from './collection-api'
-import type { User } from './session'
+import { getCollection } from '../collection/collection-api'
+import type { User } from '../auth/session'
 
 function sortWishlist(items: WishlistItem[]) {
   return [...items].sort((a, b) => b.priority - a.priority || b.date.localeCompare(a.date))

@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
-import { formatDate, todayIso } from './matches'
+import { formatDate, todayIso } from '../shared/dates'
 import {
   addCollectionItem,
   removeCollectionItem,

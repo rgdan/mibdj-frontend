@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { getStats } from './matches'
-import type { UserStats } from './matches'
-import type { User } from './session'
+import { getStats } from './stats-api'
+import type { UserStats } from './stats-api'
+import type { User } from '../auth/session'
 
 const decimal = new Intl.NumberFormat('es-CR', { maximumFractionDigits: 1 })
 

@@ -1,4 +1,4 @@
-import { apiFetch } from './api'
+import { apiFetch } from '../api/client'
 
 export type User = {
   id: number

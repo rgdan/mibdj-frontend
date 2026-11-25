@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import CollectionActions from './CollectionActions'
 import { getCollection } from './collection-api'
 import type { CollectionItem } from './collection-api'
-import type { User } from './session'
+import type { User } from '../auth/session'
 
 function Collection({ user }: { user: User }) {
   const [items, setItems] = useState<CollectionItem[]>([])

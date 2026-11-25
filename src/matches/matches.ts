@@ -1,5 +1,5 @@
-import { apiFetch } from './api'
-import type { User } from './session'
+import { apiFetch } from '../api/client'
+import type { User } from '../auth/session'
 
 export type Participant = {
   userId: number
@@ -34,12 +34,6 @@ export type NewMatch = {
   duracionMin: number
   notas: string | null
   participantes: Participant[]
-}
-
-export type UserStats = {
-  mostPlayedGames: { gameId: number; gameTitle: string; matchesPlayed: number }[]
-  averageDurationByGame: { gameId: number; gameTitle: string; averageDurationMin: number }[]
-  frequentCompanions: { userId: number; userName: string; sharedMatches: number }[]
 }
 
 export const NOTES_MAX_LENGTH = 255
@@ -98,25 +92,6 @@ export async function getUsers(signal: AbortSignal): Promise<User[]> {
   const response = await apiFetch('/api/v1/users', { signal })
   if (!response.ok) throw new Error('No se pudieron cargar los usuarios.')
   return response.json()
-}
-
-export async function getStats(userId: number, signal: AbortSignal): Promise<UserStats> {
-  const response = await apiFetch(`/api/v1/users/${userId}/stats`, { signal })
-  if (!response.ok) throw new Error('No se pudieron cargar las estadísticas.')
-  return response.json()
-}
-
-// "2026-03-07" → "7 mar 2026". Se arma la fecha en hora local para que no cambie de día.
-export function formatDate(isoDate: string) {
-  const [year, month, day] = isoDate.split('-').map(Number)
-  if (!year || !month || !day) return isoDate
-  return new Intl.DateTimeFormat('es-CR', { dateStyle: 'medium' }).format(new Date(year, month - 1, day))
-}
-
-export function todayIso() {
-  const now = new Date()
-  const pad = (value: number) => String(value).padStart(2, '0')
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
 }
 
 export function plural(count: number, singular: string, pluralForm = `${singular}s`) {

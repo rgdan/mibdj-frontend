@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { getGame } from './games'
 import type { Game } from './games'
-import CollectionActions from './CollectionActions'
-import { getCollectionItem } from './collection-api'
-import type { CollectionItem } from './collection-api'
-import WishlistActions from './WishlistActions'
-import { getWishlistItem, removeWishlistItem } from './wishlist-api'
-import type { WishlistItem } from './wishlist-api'
-import PersonalRating from './PersonalRating'
-import type { User } from './session'
+import CollectionActions from '../collection/CollectionActions'
+import { getCollectionItem } from '../collection/collection-api'
+import type { CollectionItem } from '../collection/collection-api'
+import WishlistActions from '../wishlist/WishlistActions'
+import { getWishlistItem, removeWishlistItem } from '../wishlist/wishlist-api'
+import type { WishlistItem } from '../wishlist/wishlist-api'
+import PersonalRating from '../ratings/PersonalRating'
+import type { User } from '../auth/session'
 
 function GameDetail({ id, query, user }: { id: string; query: string; user: User }) {
   const [game, setGame] = useState<Game | null>(null)

@@ -1,5 +1,5 @@
-import { apiFetch } from './api'
-import { getCollectionItem } from './collection-api'
+import { apiFetch } from '../api/client'
+import { getCollectionItem } from '../collection/collection-api'
 
 export type WishlistPriority = 1 | 2 | 3
 
