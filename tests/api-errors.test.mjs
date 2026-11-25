@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { errorMessage } from '../src/api/errors.ts'
+import { errorMessage, userErrorMessage } from '../src/api/errors.ts'
 
 const fallback = 'No pudimos guardar los datos.'
 
@@ -21,4 +21,12 @@ for (const [name, body, expected] of [
 
 test('non-JSON response', async () => {
   assert.equal(await errorMessage(new Response('<html>Error</html>'), fallback), fallback)
+})
+
+test('user errors preserve backend messages and hide network errors', () => {
+  assert.equal(userErrorMessage(new Error('Este juego ya existe.')), 'Este juego ya existe.')
+  for (const error of [new TypeError('Failed to fetch'), new Error(' '), null, 'error']) {
+    assert.equal(userErrorMessage(error), 'No pudimos conectar con el servidor. Intentá de nuevo.')
+  }
+  assert.equal(userErrorMessage(new TypeError('Failed to fetch'), 'Tus datos siguen en el formulario.'), 'Tus datos siguen en el formulario.')
 })

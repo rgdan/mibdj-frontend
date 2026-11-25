@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { userErrorMessage } from '../api/errors'
 import { addWishlistItem, removeWishlistItem, updateWishlistItem } from './wishlist-api'
 import type { WishlistItem, WishlistPriority } from './wishlist-api'
 
@@ -56,9 +57,7 @@ function WishlistActions({
       }
     } catch (error) {
       if (!controller.signal.aborted) {
-        setError(error instanceof Error && !(error instanceof TypeError)
-          ? error.message
-          : 'No pudimos conectar con el servidor. Intentá de nuevo.')
+        setError(userErrorMessage(error))
       }
     } finally {
       if (request.current === controller) {
@@ -79,9 +78,7 @@ function WishlistActions({
       if (!controller.signal.aborted) onChange(null)
     } catch (error) {
       if (!controller.signal.aborted) {
-        setError(error instanceof Error && !(error instanceof TypeError)
-          ? error.message
-          : 'No pudimos conectar con el servidor. Intentá de nuevo.')
+        setError(userErrorMessage(error))
       }
     } finally {
       if (request.current === controller) {

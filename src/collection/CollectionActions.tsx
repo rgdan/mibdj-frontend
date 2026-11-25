@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { SubmitEvent } from 'react'
+import { userErrorMessage } from '../api/errors'
 import { formatDate, todayIso } from '../shared/dates'
 import {
   addCollectionItem,
@@ -77,9 +78,7 @@ function CollectionActions({
       }
     } catch (error) {
       if (!controller.signal.aborted) {
-        setError(error instanceof Error && !(error instanceof TypeError)
-          ? error.message
-          : 'No pudimos conectar con el servidor. Intentá de nuevo.')
+        setError(userErrorMessage(error))
       }
     } finally {
       if (request.current === controller) {
@@ -115,9 +114,7 @@ function CollectionActions({
       if (!controller.signal.aborted) onChange(null)
     } catch (error) {
       if (!controller.signal.aborted) {
-        setError(error instanceof Error && !(error instanceof TypeError)
-          ? error.message
-          : 'No pudimos conectar con el servidor. Intentá de nuevo.')
+        setError(userErrorMessage(error))
       }
     } finally {
       if (request.current === controller) {

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SubmitEvent } from 'react'
+import { userErrorMessage } from '../api/errors'
 import { getGames } from '../catalog/catalog-api'
 import type { Game } from '../catalog/catalog-api'
 import { NOTES_MAX_LENGTH, createMatch } from './matches-api'
@@ -150,9 +151,7 @@ function MatchForm({ user }: { user: User }) {
       if (!controller.signal.aborted) setSaved(match)
     } catch (error) {
       if (controller.signal.aborted) return
-      setSubmitError(error instanceof Error && !(error instanceof TypeError)
-        ? error.message
-        : 'No pudimos conectar con el servidor. Tus datos siguen en el formulario; intentá de nuevo.')
+      setSubmitError(userErrorMessage(error, 'No pudimos conectar con el servidor. Tus datos siguen en el formulario; intentá de nuevo.'))
       requestAnimationFrame(() => alertRef.current?.focus())
     } finally {
       if (request.current === controller) {

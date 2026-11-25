@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SubmitEvent } from 'react'
+import { userErrorMessage } from '../api/errors'
 import { getPersonalRating, savePersonalRating } from './ratings-api'
 import type { PersonalRatingData } from './ratings-api'
 
@@ -39,9 +40,7 @@ function PersonalRating({ userId, gameId }: { userId: number; gameId: number }) 
       .catch(error => {
         if (!controller.signal.aborted) {
           setQueryError(true)
-          setError(error instanceof Error && !(error instanceof TypeError)
-            ? error.message
-            : 'No pudimos conectar con el servidor. Intentá de nuevo.')
+          setError(userErrorMessage(error))
         }
       })
       .finally(() => {
@@ -78,9 +77,7 @@ function PersonalRating({ userId, gameId }: { userId: number; gameId: number }) 
       }
     } catch (error) {
       if (!controller.signal.aborted) {
-        setError(error instanceof Error && !(error instanceof TypeError)
-          ? error.message
-          : 'No pudimos conectar con el servidor. Intentá de nuevo.')
+        setError(userErrorMessage(error))
       }
     } finally {
       if (request.current === controller) {

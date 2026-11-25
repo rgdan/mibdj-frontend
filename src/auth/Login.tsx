@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SubmitEvent } from 'react'
+import { userErrorMessage } from '../api/errors'
 import { login } from './auth-api'
 import type { User } from '../users/users-api'
 
@@ -25,9 +26,7 @@ function Login({ onLogin }: { onLogin: (user: User) => void }) {
       if (!controller.signal.aborted) onLogin(user)
     } catch (error) {
       if (!controller.signal.aborted) {
-        setError(error instanceof Error && !(error instanceof TypeError)
-          ? error.message
-          : 'No pudimos conectar con el servidor. Intentá de nuevo.')
+        setError(userErrorMessage(error))
       }
     } finally {
       if (request.current === controller) {

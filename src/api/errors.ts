@@ -10,3 +10,12 @@ export async function errorMessage(response: Response, fallback: string) {
   }
   return fallback
 }
+
+export function userErrorMessage(
+  error: unknown,
+  fallback = 'No pudimos conectar con el servidor. Intentá de nuevo.',
+) {
+  return error instanceof Error && !(error instanceof TypeError) && error.message.trim()
+    ? error.message
+    : fallback
+}
