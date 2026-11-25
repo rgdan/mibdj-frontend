@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { SubmitEvent } from 'react'
 import { login } from './session'
 import type { User } from './session'
 
@@ -10,7 +10,7 @@ function Login({ onLogin }: { onLogin: (user: User) => void }) {
 
   useEffect(() => () => request.current?.abort(), [])
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (request.current) return
 

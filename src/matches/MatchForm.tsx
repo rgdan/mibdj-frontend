@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { SubmitEvent } from 'react'
 import { getGames } from '../catalog/games'
 import type { Game } from '../catalog/games'
 import { NOTES_MAX_LENGTH, createMatch, getPlaces, getUsers, plural } from './matches'
@@ -119,7 +119,7 @@ function MatchForm({ user }: { user: User }) {
     return found
   }
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (request.current) return // ya hay un guardado en curso
 

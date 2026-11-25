@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { SubmitEvent } from 'react'
 import { getCategories, getGames } from './games'
 import type { Category, Game } from './games'
 import CollectionActions from '../collection/CollectionActions'
@@ -129,7 +129,7 @@ function Catalog({ query, user }: { query: string; user: User }) {
     setWishlistCleanupAttempt(attempt => attempt + 1)
   }
 
-  function search(event: FormEvent<HTMLFormElement>) {
+  function search(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const next = new URLSearchParams()

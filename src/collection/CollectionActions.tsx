@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { SubmitEvent } from 'react'
 import { formatDate, todayIso } from '../shared/dates'
 import {
   addCollectionItem,
@@ -48,7 +48,7 @@ function CollectionActions({
 
   useEffect(() => () => request.current?.abort(), [])
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (request.current || disabled) return
 

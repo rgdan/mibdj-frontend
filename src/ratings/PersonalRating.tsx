@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { SubmitEvent } from 'react'
 import { getPersonalRating, savePersonalRating } from './ratings-api'
 import type { PersonalRating as PersonalRatingData } from './ratings-api'
 
@@ -54,7 +54,7 @@ function PersonalRating({ userId, gameId }: { userId: number; gameId: number }) 
     }
   }, [userId, gameId, attempt])
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (request.current || loading || pending) return
 
