@@ -78,6 +78,13 @@ button, input, select, textarea { font: inherit; }
 .wishlist-form > div { min-width: 0; }
 .wishlist-form select { width: 100%; min-width: 0; min-height: 48px; padding: 10px; border: 1.5px solid var(--ink); border-radius: 6px; color: var(--ink); background: #fffcf4; font-size: 16px; }
 .wishlist-form .collection-buttons { justify-content: flex-start; }
+.personal-rating { border-top: 1px solid var(--ink); margin-top: 32px; padding-top: 4px; }
+.rating-form { display: grid; gap: 16px; max-width: 650px; }
+.rating-form > div { min-width: 0; }
+.rating-form input, .rating-form textarea { width: 100%; min-width: 0; min-height: 48px; padding: 10px; border: 1.5px solid var(--ink); border-radius: 6px; color: var(--ink); background: #fffcf4; font-size: 16px; }
+.rating-form textarea { resize: vertical; line-height: 1.5; }
+.rating-comment { white-space: pre-line; overflow-wrap: anywhere; }
+.rating-form .field-hint { margin: 6px 0 0; }
 .collection-empty { padding: 20px 0; }
 .collection-empty p { margin-bottom: 12px; }
 .catalog-message button { width: auto; min-height: 44px; margin: 0; padding: 10px 20px; }

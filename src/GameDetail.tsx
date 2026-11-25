@@ -7,6 +7,7 @@ import type { CollectionItem } from './collection-api'
 import WishlistActions from './WishlistActions'
 import { getWishlistItem, removeWishlistItem } from './wishlist-api'
 import type { WishlistItem } from './wishlist-api'
+import PersonalRating from './PersonalRating'
 import type { User } from './session'
 
 function GameDetail({ id, query, user }: { id: string; query: string; user: User }) {
@@ -112,6 +113,7 @@ function GameDetail({ id, query, user }: { id: string; query: string; user: User
             </div>
             : <WishlistActions userId={user.id} gameId={game.id} item={wishlistItem} onChange={setWishlistItem} />}
         </aside>}
+        <PersonalRating key={`${user.id}-${game.id}`} userId={user.id} gameId={game.id} />
       </article>}
   </>
 }
