@@ -1,4 +1,5 @@
 import { apiFetch } from '../api/client'
+import { errorMessage } from '../api/errors'
 import { getCollectionItem } from '../collection/collection-api'
 
 export type WishlistPriority = 1 | 2 | 3
@@ -9,19 +10,6 @@ export type WishlistItem = {
   publisher: string
   priority: WishlistPriority
   date: string
-}
-
-async function errorMessage(response: Response, fallback: string) {
-  try {
-    const body = await response.json()
-    const message = typeof body?.message === 'string' ? body.message.trim()
-      : typeof body?.detail === 'string' ? body.detail.trim()
-      : ''
-    if (message && !message.startsWith('Validation failed')) return message
-  } catch {
-    // La respuesta no incluía JSON legible.
-  }
-  return fallback
 }
 
 function wishlistPath(userId: number) {

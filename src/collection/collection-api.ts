@@ -1,4 +1,5 @@
 import { apiFetch } from '../api/client'
+import { errorMessage } from '../api/errors'
 
 export type CollectionStatus = 'nuevo' | 'usado' | 'prestado'
 
@@ -13,17 +14,6 @@ export type CollectionItem = {
 type CollectionInput = {
   date: string
   status: CollectionStatus
-}
-
-async function errorMessage(response: Response, fallback: string) {
-  try {
-    const body = await response.json()
-    const message = typeof body?.message === 'string' ? body.message.trim() : ''
-    if (message && !message.startsWith('Validation failed')) return message
-  } catch {
-    // La respuesta no incluía JSON legible.
-  }
-  return fallback
 }
 
 function collectionPath(userId: number) {

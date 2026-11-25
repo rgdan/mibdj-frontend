@@ -1,4 +1,5 @@
 import { apiFetch } from '../api/client'
+import { errorMessage } from '../api/errors'
 import type { User } from '../auth/session'
 
 export type Participant = {
@@ -38,19 +39,6 @@ export type NewMatch = {
 
 export const NOTES_MAX_LENGTH = 255
 
-// Lee el mensaje que manda el backend (server.error.include-message=always).
-// Los errores de validación de Spring no son legibles para el usuario, así que se reemplazan.
-async function backendMessage(response: Response, fallback: string) {
-  try {
-    const body = await response.json()
-    const message = typeof body?.message === 'string' ? body.message.trim() : ''
-    if (message && !message.startsWith('Validation failed')) return message
-  } catch {
-    // La respuesta no traía JSON
-  }
-  return fallback
-}
-
 export async function getMatches(userId: number, signal: AbortSignal): Promise<Match[]> {
   const response = await apiFetch(`/api/v1/users/${userId}/matches`, { signal })
   if (!response.ok) throw new Error('No se pudo cargar el historial.')
@@ -77,7 +65,7 @@ export async function createMatch(userId: number, match: NewMatch, signal: Abort
       : response.status === 404
         ? 'Alguno de los datos elegidos ya no existe. Recargá la página e intentá de nuevo.'
         : 'No pudimos guardar la partida. Intentá de nuevo.'
-    throw new Error(await backendMessage(response, fallback))
+    throw new Error(await errorMessage(response, fallback))
   }
   return response.json()
 }
