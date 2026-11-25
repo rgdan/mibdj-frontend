@@ -161,18 +161,6 @@ function Catalog({ query, user }: { query: string; user: User }) {
     </form>
 
     <div aria-busy={loading}>
-      {collectionError && <div role="alert" className="catalog-message">
-        <p>No pudimos consultar tu colección; las acciones de colección están pausadas.</p>
-        <button type="button" onClick={() => setCollectionAttempt(attempt => attempt + 1)}>Reintentar</button>
-      </div>}
-      {wishlistError && <div role="alert" className="catalog-message">
-        <p>No pudimos consultar tu lista de deseos; sus acciones están pausadas.</p>
-        <button type="button" onClick={() => setWishlistAttempt(attempt => attempt + 1)}>Reintentar</button>
-      </div>}
-      {wishlistCleanupError && <div role="alert" className="catalog-message">
-        <p>Un juego de tu colección también aparece en deseos y no pudimos quitarlo automáticamente.</p>
-        <button type="button" onClick={retryWishlistCleanup}>Reintentar</button>
-      </div>}
       {loading ? <p role="status">Cargando juegos…</p>
         : error ? <div role="alert" className="catalog-message">
           <p>No pudimos cargar el catálogo. Comprobá la conexión e intentá de nuevo.</p>
@@ -180,6 +168,18 @@ function Catalog({ query, user }: { query: string; user: User }) {
         </div>
         : games.length === 0 ? <p role="status">{title || categoryId ? 'No encontramos juegos con esos filtros.' : 'Todavía no hay juegos en el catálogo.'}</p>
         : <>
+          {collectionError && <div role="alert" className="catalog-message">
+            <p>No pudimos consultar tu colección; las acciones de colección están pausadas.</p>
+            <button type="button" onClick={() => setCollectionAttempt(attempt => attempt + 1)}>Reintentar</button>
+          </div>}
+          {wishlistError && <div role="alert" className="catalog-message">
+            <p>No pudimos consultar tu lista de deseos; sus acciones están pausadas.</p>
+            <button type="button" onClick={() => setWishlistAttempt(attempt => attempt + 1)}>Reintentar</button>
+          </div>}
+          {wishlistCleanupError && <div role="alert" className="catalog-message">
+            <p>Un juego de tu colección también aparece en deseos y no pudimos quitarlo automáticamente.</p>
+            <button type="button" onClick={retryWishlistCleanup}>Reintentar</button>
+          </div>}
           <p className="catalog-count" role="status">{games.length} {games.length === 1 ? 'juego' : 'juegos'}</p>
           <ul className="game-list">
             {games.map(game => <li key={game.id}>
